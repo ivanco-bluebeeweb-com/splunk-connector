@@ -62,7 +62,8 @@ def _hec_form(connections: list[dict]) -> ui.UINode:
     if not connections:
         return ui.Stack(direction="v", gap=1, children=[])
     return ui.Form(
-        on_submit=ui.Call("save_hec_token"),
+        action="save_hec_token",
+        submit_label="Save HEC token",
         children=[
             ui.Stack(direction="v", gap=3, align="stretch", children=[
                 _field("Instance", ui.Select(
@@ -81,7 +82,6 @@ def _hec_form(connections: list[dict]) -> ui.UINode:
                     param_name="label",
                     placeholder="e.g. Production HEC",
                 )),
-                ui.Button("Save HEC token", variant="primary"),
             ]),
         ],
     )
