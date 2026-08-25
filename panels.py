@@ -12,11 +12,13 @@ management live only in the "App settings" screen (panels_settings.py).
 The one secondary "App settings" button is always the LAST element at the
 bottom of the sidebar.
 
-Form container is stretched full-width (align="stretch") and its Input/
-Password/Select fields use native `label=`/`placeholder=` per
-UI_INTERFACE_STANDARD.md's Label+Field+gap-container rule -- no separate
-ui.Text label lines, no duplicated setup instructions here (the full
-walkthrough lives only in the "App settings" screen / connect help).
+Form container is stretched full-width (align="stretch") and every Input/
+Password/Select/TextArea field carries its own visible label via the
+_field() wrapper below (Input/Select/Password/TextArea themselves take
+no `label=` kwarg) plus a contextually specific placeholder, per
+UI_INTERFACE_STANDARD.md's Label+Field+gap-container rule -- no
+duplicated setup instructions here (the full walkthrough lives only in
+the "App settings" screen / connect help).
 """
 from __future__ import annotations
 
@@ -25,6 +27,13 @@ from imperal_sdk import ui
 from app import ext
 import splunk_client as sc
 from handlers_connection import _load_connections
+
+
+def _field(label: str, node: ui.UINode) -> ui.UINode:
+    return ui.Stack(direction="v", gap=1, align="stretch", children=[
+        ui.Text(label, variant="caption"),
+        node,
+    ])
 
 
 def _settings_button() -> ui.UINode:
@@ -44,30 +53,30 @@ def _connection_row(c: dict) -> ui.UINode:
 
 def _connect_form() -> ui.UINode:
     return ui.Stack(direction="v", gap=3, align="stretch", children=[
-        ui.Input(
-            param_name="base_url", label="Base URL",
+        _field("Base URL", ui.Input(
+            param_name="base_url",
             placeholder="https://splunk.mycompany.com:8089",
-        ),
-        ui.Select(
-            param_name="auth_mode", label="Способ входа",
+        )),
+        _field("Способ входа", ui.Select(
+            param_name="auth_mode",
             options=[
                 {"label": "Auth token", "value": "token"},
                 {"label": "Логин и пароль", "value": "password"},
             ],
             value="token",
-        ),
-        ui.Password(
-            param_name="auth_token", label="Auth token",
+        )),
+        _field("Auth token", ui.Password(
+            param_name="auth_token",
             placeholder="Settings > Tokens > New Token",
-        ),
-        ui.Input(
-            param_name="username", label="Имя пользователя",
+        )),
+        _field("Имя пользователя", ui.Input(
+            param_name="username",
             placeholder="admin",
-        ),
-        ui.Password(
-            param_name="password", label="Пароль",
+        )),
+        _field("Пароль", ui.Password(
+            param_name="password",
             placeholder="Пароль пользователя Splunk",
-        ),
+        )),
         ui.Button("Подключить", type="submit", variant="primary", full_width=True,
                   on_click=ui.Call("connect_splunk")),
     ])
@@ -106,14 +115,14 @@ async def splunk_search_panel(ctx) -> ui.UINode:
     return ui.Stack(direction="v", gap=4, children=[
         ui.Header("Search"),
         ui.Stack(direction="v", gap=3, align="stretch", children=[
-            ui.TextArea(
-                param_name="spl_query", label="SPL-запрос",
+            _field("SPL-запрос", ui.TextArea(
+                param_name="spl_query",
                 placeholder="index=security sourcetype=auth | stats count by user",
                 rows=4,
-            ),
+            )),
             ui.Row(gap=2, children=[
-                ui.Input(param_name="earliest_time", label="С", placeholder="-24h", value="-24h"),
-                ui.Input(param_name="latest_time", label="По", placeholder="now", value="now"),
+                _field("С", ui.Input(param_name="earliest_time", placeholder="-24h", value="-24h")),
+                _field("По", ui.Input(param_name="latest_time", placeholder="now", value="now")),
             ]),
             ui.Button("Выполнить поиск", type="submit", variant="primary",
                       on_click=ui.Call("dispatch_search")),
@@ -131,7 +140,7 @@ async def splunk_saved_searches_panel(ctx) -> ui.UINode:
         body = await sc.list_saved_searches(ctx, conn)
         entries = body.get("entry", [])
     except sc.ClientFail as exc:
-        return ui.Alert(title="Не удалось загрузить saved searches", message=str(exc), variant="error")
+        return ui.Alert(title="Не удалось загрузить saved searches", message=str(exc), type="error")
     rows = [
         {
             "name": e.get("name", ""),
@@ -166,7 +175,7 @@ async def splunk_indexes_panel(ctx) -> ui.UINode:
         body = await sc.list_indexes(ctx, conn)
         entries = body.get("entry", [])
     except sc.ClientFail as exc:
-        return ui.Alert(title="Не удалось загрузить индексы", message=str(exc), variant="error")
+        return ui.Alert(title="Не удалось загрузить индексы", message=str(exc), type="error")
     rows = []
     for e in entries:
         c = e.get("content", {})
@@ -203,7 +212,7 @@ async def splunk_users_panel(ctx) -> ui.UINode:
         u_body = await sc.list_users(ctx, conn)
         r_body = await sc.list_roles(ctx, conn)
     except sc.ClientFail as exc:
-        return ui.Alert(title="Не удалось загрузить пользователей/роли", message=str(exc), variant="error")
+        return ui.Alert(title="Не удалось загрузить пользователей/роли", message=str(exc), type="error")
     user_rows = []
     for e in u_body.get("entry", []):
         c = e.get("content", {})

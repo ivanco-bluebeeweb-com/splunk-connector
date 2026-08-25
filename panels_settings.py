@@ -16,6 +16,13 @@ from app import ext
 from handlers_connection import _load_connections, _load_hec_tokens
 
 
+def _field(label: str, node: ui.UINode) -> ui.UINode:
+    return ui.Stack(direction="v", gap=1, align="stretch", children=[
+        ui.Text(label, variant="caption"),
+        node,
+    ])
+
+
 def _connection_row(c: dict) -> ui.UINode:
     label = c.get("label") or c.get("base_url", "")
     return ui.Stack(direction="v", gap=1, align="start", children=[
@@ -56,25 +63,24 @@ def _hec_form(connections: list[dict]) -> ui.UINode:
         return ui.Stack(direction="v", gap=1, children=[])
     return ui.Form(
         on_submit=ui.Call("save_hec_token"),
-        full_width=True,
         children=[
             ui.Stack(direction="v", gap=3, align="stretch", children=[
-                ui.Select(
-                    label="Instance", param_name="connection_id",
+                _field("Instance", ui.Select(
+                    param_name="connection_id",
                     options=[{"label": c.get("label") or c.get("base_url", ""), "value": c.get("id")} for c in connections],
-                ),
-                ui.Password(
-                    label="HEC token", param_name="hec_token",
+                )),
+                _field("HEC token", ui.Password(
+                    param_name="hec_token",
                     placeholder="HTTP Event Collector token (Settings > Data Inputs > HTTP Event Collector)",
-                ),
-                ui.Input(
-                    label="Default index (optional)", param_name="default_index",
+                )),
+                _field("Default index (optional)", ui.Input(
+                    param_name="default_index",
                     placeholder="main",
-                ),
-                ui.Input(
-                    label="Label (optional)", param_name="label",
+                )),
+                _field("Label (optional)", ui.Input(
+                    param_name="label",
                     placeholder="e.g. Production HEC",
-                ),
+                )),
                 ui.Button("Save HEC token", type="submit", variant="primary"),
             ]),
         ],
