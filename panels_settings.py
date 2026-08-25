@@ -81,7 +81,7 @@ def _hec_form(connections: list[dict]) -> ui.UINode:
                     param_name="label",
                     placeholder="e.g. Production HEC",
                 )),
-                ui.Button("Save HEC token", type="submit", variant="primary"),
+                ui.Button("Save HEC token", variant="primary"),
             ]),
         ],
     )

@@ -77,7 +77,7 @@ def _connect_form() -> ui.UINode:
             param_name="password",
             placeholder="Пароль пользователя Splunk",
         )),
-        ui.Button("Подключить", type="submit", variant="primary", full_width=True,
+        ui.Button("Подключить", variant="primary", full_width=True,
                   on_click=ui.Call("connect_splunk")),
     ])
 
@@ -124,7 +124,7 @@ async def splunk_search_panel(ctx) -> ui.UINode:
                 _field("С", ui.Input(param_name="earliest_time", placeholder="-24h", value="-24h")),
                 _field("По", ui.Input(param_name="latest_time", placeholder="now", value="now")),
             ]),
-            ui.Button("Выполнить поиск", type="submit", variant="primary",
+            ui.Button("Выполнить поиск", variant="primary",
                       on_click=ui.Call("dispatch_search")),
         ]),
     ])
@@ -160,8 +160,7 @@ async def splunk_saved_searches_panel(ctx) -> ui.UINode:
                 ui.DataColumn("disabled", "Отключён"),
             ],
             rows=rows,
-            empty_text="Нет сохранённых поисков",
-        ),
+        ) if rows else ui.Empty(message="Нет сохранённых поисков", icon="bell"),
     ])
 
 
@@ -197,8 +196,7 @@ async def splunk_indexes_panel(ctx) -> ui.UINode:
                 ui.DataColumn("near_quota", "Близко к квоте"),
             ],
             rows=rows,
-            empty_text="Нет индексов",
-        ),
+        ) if rows else ui.Empty(message="Нет индексов", icon="database"),
     ])
 
 
@@ -240,8 +238,7 @@ async def splunk_users_panel(ctx) -> ui.UINode:
                     ui.DataColumn("email", "Email"),
                 ],
                 rows=user_rows,
-                empty_text="Нет пользователей",
-            ),
+            ) if user_rows else ui.Empty(message="Нет пользователей", icon="users"),
         },
         {
             "label": "Roles",
@@ -251,7 +248,6 @@ async def splunk_users_panel(ctx) -> ui.UINode:
                     ui.DataColumn("capabilities", "Возможности"),
                 ],
                 rows=role_rows,
-                empty_text="Нет ролей",
-            ),
+            ) if role_rows else ui.Empty(message="Нет ролей", icon="users"),
         },
     ])
