@@ -1,0 +1,22 @@
+{
+  "connect_splunk": 0,
+  "list_connections": 0,
+  "disconnect_splunk": 0,
+  "save_hec_token": 0,
+  "list_hec_tokens": 0,
+  "delete_hec_token": 0,
+  "dispatch_search": 12,
+  "get_search_status": 4,
+  "get_search_results": 8,
+  "cancel_search": 4,
+  "list_saved_searches": 8,
+  "create_saved_search": 16,
+  "update_saved_search": 16,
+  "delete_saved_search": 16,
+  "dispatch_saved_search": 12,
+  "list_indexes": 8,
+  "list_users": 8,
+  "list_roles": 8,
+  "send_event": 12,
+  "audit_search_head": 40
+}
