@@ -39,6 +39,8 @@ class ProviderConnection(sdl.Entity):
 
 
 class ProviderConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[ProviderConnection] = []
 
 
@@ -47,6 +49,8 @@ class DisconnectSplunkParams(BaseModel):
 
 
 class DeleteResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     ok: bool = True
     detail: str = ""
 
@@ -58,12 +62,15 @@ class SaveHecTokenParams(BaseModel):
 
 
 class HecTokenEntry(sdl.Entity):
+    title: str = ""
     id: str = ""
     connection_id: str = ""
     label: str = ""
 
 
 class HecTokenList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[HecTokenEntry] = []
 
 
@@ -81,6 +88,8 @@ class DispatchSearchParams(BaseModel):
 
 
 class SearchJob(sdl.Entity):
+    id: str = ""
+    title: str = ""
     sid: str = ""
     status: str = ""
     dispatch_state: str = ""
@@ -92,6 +101,8 @@ class SearchJob(sdl.Entity):
 
 
 class SearchDispatchResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     sid: str = ""
 
 
@@ -108,11 +119,15 @@ class GetSearchResultsParams(BaseModel):
 
 
 class SearchResultRow(sdl.Entity):
+    id: str = ""
+    title: str = ""
     fields_json: str = ""  # JSON-encoded dict of field->value, since fields vary per search
     raw: str = ""
 
 
 class SearchResultList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SearchResultRow] = []
 
 
@@ -128,6 +143,8 @@ class ListSavedSearchesParams(BaseModel):
 
 
 class SavedSearch(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str = ""
     search: str = ""
     cron_schedule: str = ""
@@ -137,6 +154,8 @@ class SavedSearch(sdl.Entity):
 
 
 class SavedSearchList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SavedSearch] = []
 
 
@@ -177,6 +196,8 @@ class ListIndexesParams(BaseModel):
 
 
 class SplunkIndex(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str = ""
     current_db_size_mb: float = 0.0
     max_total_data_size_mb: float = 0.0
@@ -186,6 +207,8 @@ class SplunkIndex(sdl.Entity):
 
 
 class IndexList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SplunkIndex] = []
 
 
@@ -196,6 +219,8 @@ class ListUsersParams(BaseModel):
 
 
 class SplunkUser(sdl.Entity):
+    id: str = ""
+    title: str = ""
     username: str = ""
     real_name: str = ""
     roles: str = ""  # comma-joined
@@ -203,6 +228,8 @@ class SplunkUser(sdl.Entity):
 
 
 class UserList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SplunkUser] = []
 
 
@@ -211,11 +238,15 @@ class ListRolesParams(BaseModel):
 
 
 class SplunkRole(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str = ""
     capabilities: str = ""  # comma-joined, truncated
 
 
 class RoleList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     items: list[SplunkRole] = []
 
 
@@ -230,6 +261,8 @@ class SendEventParams(BaseModel):
 
 
 class SendEventResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     ok: bool = True
     detail: str = ""
 
@@ -241,12 +274,16 @@ class AuditSearchHeadParams(BaseModel):
 
 
 class AuditFinding(sdl.Entity):
+    id: str = ""
+    title: str = ""
     kind: str = ""
     detail: str = ""
     severity: str = ""
 
 
 class AuditReport(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connection_id: str = ""
     saved_searches_total: int = 0
     saved_searches_without_alert_action: int = 0
