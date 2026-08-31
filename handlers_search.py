@@ -72,7 +72,7 @@ async def get_search_status(ctx, params: GetSearchStatusParams) -> ActionResult:
         body = await sc.get_search_status(ctx, conn, params.sid)
     except sc.ClientFail as exc:
         return ActionResult.error(str(exc))
-    return ActionResult.success(data=_job_from_status(params.sid, body))
+    return ActionResult.success(data=_job_from_status(params.sid, body), summary="Search status retrieved.")
 
 
 @chat.function(
@@ -96,7 +96,7 @@ async def get_search_results(ctx, params: GetSearchResultsParams) -> ActionResul
     for row in body.get("results", []):
         fields = {k: v for k, v in row.items() if not k.startswith("_")}
         rows.append(SearchResultRow(fields_json=str(fields), raw=str(row.get("_raw", ""))[:2000]))
-    return ActionResult.success(data=SearchResultList(items=rows))
+    return ActionResult.success(data=SearchResultList(items=rows), summary="Search results retrieved.")
 
 
 @chat.function(

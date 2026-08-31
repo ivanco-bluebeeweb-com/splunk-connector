@@ -48,7 +48,7 @@ async def list_saved_searches(ctx, params: ListSavedSearchesParams) -> ActionRes
     except sc.ClientFail as exc:
         return ActionResult.error(str(exc))
     items = [_saved_search_from_entry(e) for e in body.get("entry", [])]
-    return ActionResult.success(data=SavedSearchList(items=items))
+    return ActionResult.success(data=SavedSearchList(items=items), summary="Saved searches listed.")
 
 
 @chat.function(
@@ -167,7 +167,7 @@ async def list_indexes(ctx, params: ListIndexesParams) -> ActionResult:
             disabled=bool(c.get("disabled", False)),
             near_quota=bool(mx and cur >= 0.9 * mx),
         ))
-    return ActionResult.success(data=IndexList(items=items))
+    return ActionResult.success(data=IndexList(items=items), summary="Indexes listed.")
 
 
 @chat.function(
@@ -194,7 +194,7 @@ async def list_users(ctx, params: ListUsersParams) -> ActionResult:
             username=e.get("name", ""), real_name=c.get("realname", ""),
             roles=",".join(c.get("roles", []) or []), email=c.get("email", ""),
         ))
-    return ActionResult.success(data=UserList(items=items))
+    return ActionResult.success(data=UserList(items=items), summary="Users listed.")
 
 
 @chat.function(
@@ -219,4 +219,4 @@ async def list_roles(ctx, params: ListRolesParams) -> ActionResult:
         c = e.get("content", {})
         caps = c.get("capabilities", []) or []
         items.append(SplunkRole(name=e.get("name", ""), capabilities=",".join(caps[:20])))
-    return ActionResult.success(data=RoleList(items=items))
+    return ActionResult.success(data=RoleList(items=items), summary="Roles listed.")

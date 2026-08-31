@@ -54,4 +54,4 @@ async def audit_search_head(ctx, params: AuditSearchHeadParams) -> ActionResult:
         saved_searches_without_alert_action=no_action,
         indexes_near_quota=near_quota,
         findings=findings,
-    ))
+    ), summary="Search head audit ready.")
