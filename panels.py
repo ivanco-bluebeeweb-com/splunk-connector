@@ -38,8 +38,7 @@ def _field(label: str, node: ui.UINode) -> ui.UINode:
 
 def _settings_button() -> ui.UINode:
     return ui.Button(
-        "App settings", variant="secondary", size="sm", full_width=True,
-        icon="settings", on_click=ui.Call("__panel__splunk_settings"),
+        "App settings", variant="secondary", size="sm", icon="settings", on_click=ui.Call("__panel__splunk_settings"),
     )
 
 
@@ -77,8 +76,7 @@ def _connect_form() -> ui.UINode:
             param_name="password",
             placeholder="Пароль пользователя Splunk",
         )),
-        ui.Button("Подключить", variant="primary", full_width=True,
-                  on_click=ui.Call("connect_splunk")),
+        ui.Button("Подключить", variant="primary", on_click=ui.Call("connect_splunk")),
     ])
 
 
